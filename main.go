@@ -27,6 +27,8 @@ var (
 )
 
 func main() {
+	log.SetFlags(0)
+
 	var runHealthcheck bool
 
 	flag.BoolVar(&runHealthcheck,
