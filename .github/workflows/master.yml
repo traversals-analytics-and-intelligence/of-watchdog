@@ -21,17 +21,17 @@ jobs:
         run: ./build.sh
         shell: bash
         
-      - name: Push artifact
+      - name: Publish artifact
         id: push
-        uses: AutoModality/action-cloudsmith@0.3.0
+        uses: AutoModality/action-cloudsmith@35a7ef41805944f20d87ed8b8d6741a8c73474e7
         with:
           api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
           command: 'push'
           format: 'raw'
-          owner: 'dirk-kolb'
+          owner: 'traversals-analytics-and-intel'
           repo: 'internal'
           file: 'of-watchdog' 
-          name: 'Raw Test'
+          name: 'of-watchdog'
           version: ${{ steps.tag_action.outputs.new_tag }}
 
       - uses: 8398a7/action-slack@8f3d01dfe362ef77e02f95b5b319d91723f53ca3
