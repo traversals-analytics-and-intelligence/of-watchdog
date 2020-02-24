@@ -6,31 +6,38 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    
-    - name: Check out code
-      uses: actions/checkout@v2
 
-    - name: Build
-      run: ./build.sh
-      shell: bash
-    
-    
-    - uses: 8398a7/action-slack@8f3d01dfe362ef77e02f95b5b319d91723f53ca3
-      with:
-        status: ${{ job.status }}
-        author_name: ${{ github.workflow }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      if: failure()
+      - name: Check out code
+        uses: actions/checkout@v2
 
-    - uses: 8398a7/action-slack@8f3d01dfe362ef77e02f95b5b319d91723f53ca3
-      with:
-        status: ${{ job.status }}
-        author_name: ${{ github.workflow }}
-        text: Published new version ${{ steps.tag_action.outputs.new_tag }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      if: success()
+      - name: Bump version and push tag
+        id: tag_action
+        uses: anothrNick/github-tag-action@530174accd51538b8a8fa70e6a67cac2ed3ba597
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+
+      - name: Build
+        run: ./build.sh
+        shell: bash
+
+
+      - uses: 8398a7/action-slack@8f3d01dfe362ef77e02f95b5b319d91723f53ca3
+        with:
+          status: ${{ job.status }}
+          author_name: ${{ github.workflow }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+
+      - uses: 8398a7/action-slack@8f3d01dfe362ef77e02f95b5b319d91723f53ca3
+        with:
+          status: ${{ job.status }}
+          author_name: ${{ github.workflow }}
+          text: Published new version ${{ steps.tag_action.outputs.new_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: success()
 
