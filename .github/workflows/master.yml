@@ -21,18 +21,25 @@ jobs:
         run: ./build.sh
         shell: bash
         
-      - name: Publish artifact
-        id: push
-        uses: AutoModality/action-cloudsmith@35a7ef41805944f20d87ed8b8d6741a8c73474e7
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: 'push'
-          format: 'raw'
-          owner: 'traversals-analytics-and-intel'
-          repo: 'internal'
-          file: 'of-watchdog' 
-          name: 'of-watchdog'
-          version: ${{ steps.tag_action.outputs.new_tag }}
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: of-watchdog
+          asset_name: of-watchdog
 
       - uses: 8398a7/action-slack@8f3d01dfe362ef77e02f95b5b319d91723f53ca3
         with:
