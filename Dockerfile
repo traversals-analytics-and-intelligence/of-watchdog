@@ -11,7 +11,7 @@ COPY config              config
 COPY executor            executor
 COPY metrics             metrics
 COPY metrics             metrics
-COPY main.go             .
+COPY main.go             main.go
 
 # Run a gofmt and exclude all vendored code.
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./vendor/*"))"
