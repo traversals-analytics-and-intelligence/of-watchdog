@@ -40,6 +40,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: of-watchdog
           asset_name: of-watchdog
+          content_type: application/zip
 
       - uses: 8398a7/action-slack@8f3d01dfe362ef77e02f95b5b319d91723f53ca3
         with:
