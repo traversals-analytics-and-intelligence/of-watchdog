@@ -6,36 +6,31 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+    
+    - name: Check out code
+      uses: actions/checkout@v2
 
-#     - name: Set up Go 1.13
-#       uses: actions/setup-go@v1
-#       with:
-#         go-version: 1.13
-#       id: go
+    - name: Build
+      run: ./build.sh
+      shell: bash
+    
+    
+    - uses: 8398a7/action-slack@8f3d01dfe362ef77e02f95b5b319d91723f53ca3
+      with:
+        status: ${{ job.status }}
+        author_name: ${{ github.workflow }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: failure()
 
-     - name: Check out code
-       uses: actions/checkout@v2
-       
-     - name: Build
-       
-       run: ./build.sh
-       shell: bash
-      
-#     - name: Get dependencies
-#       run: |
-#         export GOPATH=$HOME/go
-#         export GOBIN=$(go env GOPATH)/bin
-#         export PATH=$PATH:$GOPATH
-#         export PATH=$PATH:$GOBIN
-#         mkdir -p $GOPATH/pkg
-#         mkdir -p $GOBIN
-#         mkdir -p $GOPATH/src/github.com/$GITHUB_REPOSITORY
-#         mv $(pwd)/* $GOPATH/src/github.com/$GITHUB_REPOSITORY
-#         cd $GOPATH/src/github.com/$GITHUB_REPOSITORY
-#         go get -v -t -d ./...
-#         if [ -f Gopkg.toml ]; then
-#             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-#             dep ensure
-#         fi
-
+    - uses: 8398a7/action-slack@8f3d01dfe362ef77e02f95b5b319d91723f53ca3
+      with:
+        status: ${{ job.status }}
+        author_name: ${{ github.workflow }}
+        text: Published new version ${{ steps.tag_action.outputs.new_tag }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: success()
 
