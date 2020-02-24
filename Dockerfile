@@ -6,12 +6,17 @@ ARG GOPROXY=""
 
 WORKDIR /go/src/github.com/openfaas-incubator/of-watchdog
 
-#COPY vendor              vendor
-#COPY config              config
-#COPY executor            executor
-#COPY metrics             metrics
-#COPY metrics             metrics
-COPY main.go             main.go
+COPY vendor              vendor
+RUN ls
+COPY config              config
+RUN ls
+COPY executor            executor
+RUN ls
+COPY metrics             metrics
+RUN ls
+COPY metrics             metrics
+RUN ls
+COPY main.go             .
 
 # Run a gofmt and exclude all vendored code.
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./vendor/*"))"
