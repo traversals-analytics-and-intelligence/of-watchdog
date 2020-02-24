@@ -6,6 +6,8 @@ ARG GOPROXY=""
 
 WORKDIR /go/src/github.com/openfaas-incubator/of-watchdog
 
+# This runs are only a workaround, it's not possible to have all copy after each other
+# https://github.com/moby/moby/issues/37965
 COPY vendor              vendor
 RUN ls
 COPY config              config
