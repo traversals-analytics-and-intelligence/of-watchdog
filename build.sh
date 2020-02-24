@@ -4,7 +4,7 @@ if [ ! "$http_proxy" = "" ]
 then
     docker build --no-cache --build-arg "https_proxy=$https_proxy" --build-arg "http_proxy=$http_proxy" -t openfaas/of-watchdog:build .
 else
-    docker build -t openfaas/of-watchdog:build .
+    docker build --no-cache -t openfaas/of-watchdog:build .
 fi
 
 docker build --no-cache --build-arg PLATFORM="-darwin" -t openfaas/of-watchdog:latest-dev-darwin . -f Dockerfile.packager
