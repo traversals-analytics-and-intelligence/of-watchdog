@@ -1,4 +1,4 @@
-name: Go
+name: Master Build
 on: [push]
 jobs:
 
@@ -17,7 +17,9 @@ jobs:
        uses: actions/checkout@v2
        
      - name: Build
+       
        run: ./build.sh
+       shell: bash
       
 #     - name: Get dependencies
 #       run: |
